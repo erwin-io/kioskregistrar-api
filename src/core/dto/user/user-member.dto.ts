@@ -1,95 +1,42 @@
-import { Transform, Type } from "class-transformer";
+import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
 import {
-  IsNotEmpty,
-  IsNumberString,
-  ArrayNotEmpty,
   IsArray,
-  ValidateNested,
   IsBooleanString,
   IsDateString,
   IsEmail,
   IsIn,
+  IsNotEmpty,
+  IsNumberString,
   IsOptional,
   IsUppercase,
   Matches,
 } from "class-validator";
 
-export class DefaultAdminUserDto {
-  @IsNotEmpty()
-  firstName: string;
-
-  @IsNotEmpty()
-  lastName: string;
-
-  @IsNotEmpty()
-  @IsNumberString()
-  @Transform(({ obj, key }) => {
-    return obj[key].toString();
-  })
-  mobileNumber: string;
-
-  @IsNotEmpty()
-  @ArrayNotEmpty()
-  @IsArray()
-  @Type(() => CreateAdminUserAccessDto)
-  @ValidateNested()
-  access: CreateAdminUserAccessDto[];
-}
-
-export class CreateAdminUserAccessDto {
-  @IsNotEmpty()
-  page: string;
-
-  @IsNotEmpty()
-  @Transform(({ obj, key }) => {
-    return obj[key].toString();
-  })
-  @IsBooleanString()
-  view = false;
-
-  @IsNotEmpty()
-  @Transform(({ obj, key }) => {
-    return obj[key].toString();
-  })
-  @IsBooleanString()
-  modify = false;
-}
-
-export class CreateAdminUserDto extends DefaultAdminUserDto {
-  @IsNotEmpty()
-  userName: string;
-
-  @IsNotEmpty()
-  password: string;
-
-  @IsOptional()
-  userProfilePic: any;
-}
-
-export class UpdateAdminUserDto extends DefaultAdminUserDto {
-  @IsNotEmpty()
-  adminCode: string;
-}
-
 export class MemberVerificationDto {
+  @ApiProperty()
   @IsArray()
   memberCodes: string[] = [];
 }
 
 export class DefaultMemberDto {
+  @ApiProperty()
   @IsNotEmpty()
   firstName: string;
 
+  @ApiProperty()
   @IsOptional()
   middleName: string;
 
   @IsNotEmpty()
   lastName: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsEmail()
   email: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @Transform(({ obj, key }) => {
     return obj[key].toString();
@@ -97,30 +44,37 @@ export class DefaultMemberDto {
   @IsNumberString()
   mobileNumber: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsDateString({ strict: true } as any)
   birthDate: Date;
 
+  @ApiProperty()
   @IsNotEmpty()
   address: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsIn(["MALE", "FEMALE", "OTHERS"])
   @IsUppercase()
   gender: "MALE" | "FEMALE" | "OTHERS";
 
+  @ApiProperty()
   @IsNotEmpty()
   courseTaken: string;
 
+  @ApiProperty()
   @IsOptional()
   major: string;
 
+  @ApiProperty()
   @Transform(({ obj, key }) => {
     return obj[key].toString();
   })
   @IsBooleanString()
   isAlumni = false;
 
+  @ApiProperty()
   @IsNotEmpty()
   @Matches(
     /^ *((\d *- *\d)|(\d{2} *- *\d{2})|(\d{3} *- *\d{3})|(\d{4} *- *\d{4})|(\d{5} *- *\d{5})) *$/,
@@ -131,9 +85,11 @@ export class DefaultMemberDto {
   )
   schoolYearLastAttended: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   primarySchoolName = "";
 
+  @ApiProperty()
   @IsNotEmpty()
   @Matches(
     /^ *((\d *- *\d)|(\d{2} *- *\d{2})|(\d{3} *- *\d{3})|(\d{4} *- *\d{4})|(\d{5} *- *\d{5})) *$/,
@@ -144,9 +100,11 @@ export class DefaultMemberDto {
   )
   primarySyGraduated = "";
 
+  @ApiProperty()
   @IsNotEmpty()
   secondarySchoolName = "";
 
+  @ApiProperty()
   @IsNotEmpty()
   @Matches(
     /^ *((\d *- *\d)|(\d{2} *- *\d{2})|(\d{3} *- *\d{3})|(\d{4} *- *\d{4})|(\d{5} *- *\d{5})) *$/,
@@ -157,14 +115,14 @@ export class DefaultMemberDto {
   )
   secondarySyGraduated = "";
 
+  @ApiProperty()
   @IsOptional()
   birthCertFile: any;
 
+  @ApiProperty()
   @IsOptional()
   userProfilePic: any;
 }
 
 export class UpdateMemberUserDto extends DefaultMemberDto {
-  @IsNotEmpty()
-  memberCode: string;
 }

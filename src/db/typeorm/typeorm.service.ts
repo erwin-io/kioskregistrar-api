@@ -1,4 +1,4 @@
-import { Admin } from "typeorm";
+import { Admin } from "../entities/Admin";
 import { Files } from "../entities/Files";
 import { Member } from "../entities/Member";
 import { RequestRequirements } from "../entities/RequestRequirements";
@@ -8,6 +8,7 @@ import { Users } from "../entities/Users";
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { ConfigService } from "@nestjs/config";
 import { Injectable, Inject } from "@nestjs/common";
+import { Request } from "../entities/Request";
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {

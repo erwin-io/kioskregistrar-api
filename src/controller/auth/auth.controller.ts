@@ -11,19 +11,25 @@ import {
   Query,
 } from "@nestjs/common";
 import { AuthService } from "../../services/auth.service";
-import { LogInDto, RegisterMemberUserDto } from "src/core/dto/auth";
-import { AdminModel } from "src/core/models/admin";
 import { ApiResponseModel } from "src/core/models/api-response.model";
-import { MemberModel } from "src/core/models/member";
+import { LogInDto } from "src/core/dto/auth/login.dto";
+import {
+  RegisterMemberBatchUserDto,
+  RegisterMemberUserDto,
+} from "src/core/dto/auth/register-member.dto";
+import { ApiParam, ApiTags } from "@nestjs/swagger";
+import { Member } from "src/db/entities/Member";
+import { Admin } from "src/db/entities/Admin";
+import { IsIn } from "class-validator";
 
-// @ApiTags("auth")
+@ApiTags("auth")
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post("register/member")
   public async register(@Body() createUserDto: RegisterMemberUserDto) {
-    let res: ApiResponseModel<MemberModel>;
+    let res: ApiResponseModel<Member>;
     try {
       res.data = await this.authService.registerMember(createUserDto);
       res.success = true;
@@ -35,14 +41,15 @@ export class AuthController {
     }
   }
 
-  @Post("login/:type")
-  public async loginAdmin(
-    @Param("type") type: string,
-    @Body() loginUserDto: LogInDto
+  @Post("register/member/batch")
+  public async registerBatch(
+    @Body() createUserDto: RegisterMemberBatchUserDto
   ) {
-    let res: ApiResponseModel<AdminModel>;
+    let res: ApiResponseModel<Member[]>;
     try {
-      res.data = await this.authService.loginAdmin(loginUserDto);
+      res.data = await this.authService.registerMemberBatch(
+        createUserDto.members
+      );
       res.success = true;
       return res;
     } catch (e) {
@@ -52,11 +59,21 @@ export class AuthController {
     }
   }
 
-  @Post("login/member")
-  public async login(@Body() loginUserDto: LogInDto) {
-    let res: ApiResponseModel<AdminModel>;
+  @ApiParam({
+    name: "type",
+    required: true,
+    description: "either an ADMIN or MEMBER",
+  })
+  @Post("login/:type")
+  public async loginAdmin(
+    @Param("type") type: "ADMIN" | "MEMBER",
+    @Body() loginUserDto: LogInDto
+  ) {
+    const res: ApiResponseModel<Admin | Member> = {} as ApiResponseModel<
+      Admin | Member
+    >;
     try {
-      res.data = await this.authService.loginAdmin(loginUserDto);
+      res.data = await this.authService.login(loginUserDto, type);
       res.success = true;
       return res;
     } catch (e) {

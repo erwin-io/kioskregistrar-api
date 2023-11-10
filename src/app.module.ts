@@ -8,6 +8,7 @@ import { FirebaseProviderModule } from "./core/provider/firebase/firebase-provid
 import { UsersService } from "./services/users.service";
 import * as Joi from "@hapi/joi";
 import { getEnvPath } from "./common/utils/utils";
+import { UsersModule } from "./controller/users/users.module";
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 @Module({
   imports: [
@@ -20,9 +21,10 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
     }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
     AuthModule,
+    UsersModule,
     FirebaseProviderModule,
   ],
-  providers: [AppService, UsersService],
+  providers: [AppService],
   controllers: [],
 })
 export class AppModule {}

@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
 import {
   IsNotEmpty,
@@ -7,33 +8,26 @@ import {
   IsBooleanString,
   IsEnum,
 } from "class-validator";
-import { CONST_REQUEST_STATUS } from "../utils/constant";
-export class RequestDto {
-  @IsNotEmpty()
-  requestedById: string;
-
-  @IsNotEmpty()
-  requestTypeId: string;
-
-  @IsNotEmpty()
-  description: string;
-}
 
 export class UpdateRequestDescriptionDto {
+  @ApiProperty()
   @IsNotEmpty()
   requestNo: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   description: string;
 }
 
 export class UpdateRequestStatusDto {
+  @ApiProperty()
   @IsNotEmpty()
   requestNo: string;
 }
 
 
 export class AssignRequestDto extends UpdateRequestStatusDto {
+  @ApiProperty()
   @IsNotEmpty()
   assignedAdminId: string;
 }

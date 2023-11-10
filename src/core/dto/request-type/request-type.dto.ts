@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
 import {
   IsNotEmpty,
@@ -7,15 +8,18 @@ import {
   IsBooleanString,
 } from "class-validator";
 export class RequestTypeDto {
+  @ApiProperty()
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty()
   @Transform(({ obj, key }) => {
     return obj[key].toString();
   })
   @IsBooleanString()
   authorizeACopy = false;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumberString()
   @Transform(({ obj, key }) => {
@@ -23,6 +27,7 @@ export class RequestTypeDto {
   })
   fee: string;
 
+  @ApiProperty()
   @Transform(({ obj, key }) => {
     return obj[key].toString();
   })
@@ -30,15 +35,12 @@ export class RequestTypeDto {
   isPaymentRequired = false;
 }
 
-export class UpdateRequestTypeDto extends RequestTypeDto {
-  @IsNotEmpty()
-  requestTypeId: string;
-}
-
 export class RequestRequirementDto {
+  @ApiProperty()
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty()
   @Transform(({ obj, key }) => {
     return obj[key].toString();
   })
@@ -47,11 +49,7 @@ export class RequestRequirementDto {
 }
 
 export class CreateRequestRequirementDto extends RequestRequirementDto {
+  @ApiProperty()
   @IsNotEmpty()
   requestTypeId: string;
-}
-
-export class UpdateRequestRequirementDto extends RequestRequirementDto {
-  @IsNotEmpty()
-  requestRequirementsId: string;
 }

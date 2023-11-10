@@ -7,21 +7,16 @@ import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
 import { AuthController } from "./auth.controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Users } from "src/shared/entities/Users";
-import { NotificationModule } from "../notification/notification.module";
-import { FirebaseProviderModule } from "src/core/provider/firebase/firebase-provider.module";
-import { FileModule } from "../file/file.module";
-import { UserActivityLogModule } from "../user-activity-log/user-activity-log.module";
+import { Users } from "src/db/entities/Users";
+import { Admin } from "src/db/entities/Admin";
+import { Member } from "src/db/entities/Member";
 
 @Module({
   imports: [
     UsersModule,
-    FileModule,
-    NotificationModule,
-    UserActivityLogModule,
     PassportModule.register({}),
     JwtModule.register({}),
-    TypeOrmModule.forFeature([Users]),
+    TypeOrmModule.forFeature([Users, Admin, Member]),
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],

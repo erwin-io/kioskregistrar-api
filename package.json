@@ -26,8 +26,6 @@
     "node": ">=16 <=18"
   },
   "dependencies": {
-    "@automapper/core": "^8.7.6",
-    "@automapper/nestjs": "^8.7.6",
     "@firebase/auth": "^0.21.0",
     "@firebase/storage": "^0.10.0",
     "@hapi/joi": "^17.1.1",

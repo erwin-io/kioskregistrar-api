@@ -29,7 +29,7 @@ export class AuthController {
 
   @Post("register/member")
   public async register(@Body() createUserDto: RegisterMemberUserDto) {
-    let res: ApiResponseModel<Member>;
+    const res: ApiResponseModel<Member> = {} as any;
     try {
       res.data = await this.authService.registerMember(createUserDto);
       res.success = true;
@@ -45,7 +45,7 @@ export class AuthController {
   public async registerBatch(
     @Body() createUserDto: RegisterMemberBatchUserDto
   ) {
-    let res: ApiResponseModel<Member[]>;
+    const res: ApiResponseModel<Member[]> = {} as any;
     try {
       res.data = await this.authService.registerMemberBatch(
         createUserDto.members

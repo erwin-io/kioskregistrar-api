@@ -100,9 +100,7 @@ export class UsersService {
     } else {
       condition.user.active = true;
     }
-    if (verified === undefined || verified === null) {
-      condition.isVerified = verified;
-    }
+    condition.isVerified = verified;
     const [results, total] = await Promise.all([
       this.userRepo.manager.find(Member, {
         select: {
@@ -155,7 +153,23 @@ export class UsersService {
         },
       },
     });
+    if (!res || !res?.user) {
+      throw Error(USER_ERROR_ADMIN_NOT_FOUND);
+    }
     delete res.user.password;
+    res.user.access = (
+      res.user.access as {
+        page: string;
+        view: boolean;
+        modify: boolean;
+        rights: string[];
+      }[]
+    ).map((res) => {
+      if (!res.rights) {
+        res["rights"] = [];
+      }
+      return res;
+    });
     return res;
   }
 
@@ -173,6 +187,9 @@ export class UsersService {
         },
       },
     });
+    if (!res || !res?.user) {
+      throw Error(USER_ERROR_MEMBER_NOT_FOUND);
+    }
     delete res.user.password;
     return res;
   }
@@ -224,7 +241,21 @@ export class UsersService {
       admin = await entityManager.save(admin);
       admin.adminCode = generateAdminCode(admin.adminId);
       delete admin.user.password;
-      return await entityManager.save(Admin, admin);
+      admin = await entityManager.save(Admin, admin);
+      admin.user.access = (
+        admin.user.access as {
+          page: string;
+          view: boolean;
+          modify: boolean;
+          rights: string[];
+        }[]
+      ).map((res) => {
+        if (!res.rights) {
+          res["rights"] = [];
+        }
+        return res;
+      });
+      return admin;
     });
   }
 

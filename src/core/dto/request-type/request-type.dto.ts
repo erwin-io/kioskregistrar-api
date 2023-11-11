@@ -12,7 +12,9 @@ export class RequestTypeDto {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: Boolean
+  })
   @Transform(({ obj, key }) => {
     return obj[key].toString();
   })
@@ -27,7 +29,9 @@ export class RequestTypeDto {
   })
   fee: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: Boolean
+  })
   @Transform(({ obj, key }) => {
     return obj[key].toString();
   })
@@ -40,7 +44,9 @@ export class RequestRequirementDto {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    type: Boolean
+  })
   @Transform(({ obj, key }) => {
     return obj[key].toString();
   })

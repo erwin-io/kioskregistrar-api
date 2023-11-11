@@ -36,6 +36,15 @@ export class CreateAdminUserAccessDto {
   })
   @IsBooleanString()
   modify = false;
+
+  @ApiProperty({
+    isArray: true,
+    type: String
+  })
+  @IsNotEmpty()
+  @IsArray()
+  @Type(() => String)
+  rights: string[] = [];
 }
 
 export class DefaultAdminUserDto {

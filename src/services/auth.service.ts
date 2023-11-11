@@ -153,26 +153,12 @@ export class AuthService {
     }
   }
 
-  async login({userName, password}, type: "ADMIN" | "MEMBER") {
+  async loginAdmin({userName, password}) {
     let login = await this.getByCredentials({userName, password});
     if(!login) {
       throw Error(LOGIN_ERROR_USER_NOT_FOUND)
     }
-    const config: FindOneOptions<Admin | Member> = { 
-      select: {
-        user: {
-          userId: true,
-          userName: true,
-          userType: true,
-          active: true,
-          accessGranted: true,
-          profileFile: {
-            fileId: true,
-            fileName: true,
-            url: true,
-          },
-        },
-      },
+    const res = await this.adminRepo.findOne({
       where: {
         user: {
           userId: login.userId
@@ -184,12 +170,30 @@ export class AuthService {
           profileFile: true
         }
       }
+    });
+    delete res.user.password;
+    return res;
+  }
+
+  async loginMember({userName, password}) {
+    let login = await this.getByCredentials({userName, password});
+    if(!login) {
+      throw Error(LOGIN_ERROR_USER_NOT_FOUND)
     }
-    if(type === "ADMIN") {
-      return await this.adminRepo.findOne(config);
-    } else {
-      return await this.memberRepo.findOne(config);
-    }
-    
+    const res = await this.memberRepo.findOne({ 
+      where: {
+        user: {
+          userId: login.userId
+        }
+      },
+      relations: 
+      {
+        user: {
+          profileFile: true
+        }
+      }
+    });
+    delete res.user.password;
+    return res;
   }
 }

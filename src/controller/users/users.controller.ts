@@ -9,13 +9,18 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { ApiTags, ApiQuery } from "@nestjs/swagger";
+import { ApiTags, ApiQuery, ApiParam } from "@nestjs/swagger";
+import {
+  DELETE_SUCCESS,
+  SAVING_SUCCESS,
+  UPDATE_SUCCESS,
+} from "src/common/constant/api-response.constant";
 import { JwtAuthGuard } from "src/core/auth/jwt.auth.guard";
 import {
   UpdateAdminUserResetPasswordDto,
   UpdateMemberUserResetPasswordDto,
 } from "src/core/dto/auth/reset-password.dto";
-import { PaginationParams } from "src/core/dto/pagination-params.dto";
+import { PaginationParamsDto } from "src/core/dto/pagination-params.dto";
 import {
   MemberVerificationDto,
   UpdateMemberUserDto,
@@ -82,7 +87,7 @@ export class UsersController {
 
   @Post("/admin/page")
   //   @UseGuards(JwtAuthGuard)
-  async getPaginatedAdminUsers(@Body() paginationParams: PaginationParams) {
+  async getPaginatedAdminUsers(@Body() paginationParams: PaginationParamsDto) {
     const res: ApiResponseModel<{ results: Admin[]; total: number }> =
       {} as any;
     try {
@@ -98,18 +103,24 @@ export class UsersController {
     }
   }
 
+  @ApiParam({
+    name: "status",
+    required: false,
+    example: "",
+    description: "status: VERIFIED",
+  })
   @Post("/member/page/:status")
   //   @UseGuards(JwtAuthGuard)
   async getPaginatedMemberUsers(
-    @Param("status") status: string,
-    @Body() paginationParams: PaginationParams
+    @Param("status") status = "",
+    @Body() paginationParams: PaginationParamsDto
   ) {
     const res: ApiResponseModel<{ results: Member[]; total: number }> =
       {} as any;
     try {
       res.data = await this.userService.getUserPaginationMember(
         paginationParams,
-        status == "verified"
+        status?.toUpperCase() == "VERIFIED"
       );
       res.success = true;
       return res;
@@ -127,6 +138,7 @@ export class UsersController {
     try {
       res.data = await this.userService.createAdmin(createAdminUserDto);
       res.success = true;
+      res.message = `Admin ${SAVING_SUCCESS}`;
       return res;
     } catch (e) {
       res.success = false;
@@ -148,6 +160,7 @@ export class UsersController {
         updateAdminUserDto
       );
       res.success = true;
+      res.message = `Admin ${UPDATE_SUCCESS}`;
       return res;
     } catch (e) {
       res.success = false;
@@ -169,6 +182,7 @@ export class UsersController {
         updateMemberUserDto
       );
       res.success = true;
+      res.message = `Member ${UPDATE_SUCCESS}`;
       return res;
     } catch (e) {
       res.success = false;
@@ -190,6 +204,7 @@ export class UsersController {
         updateAdminUserDto
       );
       res.success = true;
+      res.message = `Admin password ${UPDATE_SUCCESS}`;
       return res;
     } catch (e) {
       res.success = false;
@@ -211,6 +226,7 @@ export class UsersController {
         updateMemberUserDto
       );
       res.success = true;
+      res.message = `Member password ${UPDATE_SUCCESS}`;
       return res;
     } catch (e) {
       res.success = false;
@@ -226,6 +242,7 @@ export class UsersController {
     try {
       res.data = await this.userService.deleteAdmin(adminCode);
       res.success = true;
+      res.message = `Admin ${DELETE_SUCCESS}`;
       return res;
     } catch (e) {
       res.success = false;
@@ -242,6 +259,7 @@ export class UsersController {
     try {
       res.data = await this.userService.approveMemberBatch(dto);
       res.success = true;
+      res.message = `Member approval ${UPDATE_SUCCESS}`;
       return res;
     } catch (e) {
       res.success = false;

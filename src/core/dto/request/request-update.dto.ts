@@ -12,10 +12,6 @@ import {
 export class UpdateRequestDescriptionDto {
   @ApiProperty()
   @IsNotEmpty()
-  requestNo: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
   description: string;
 }
 

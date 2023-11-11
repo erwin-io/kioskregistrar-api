@@ -21,6 +21,7 @@ import { ApiParam, ApiTags } from "@nestjs/swagger";
 import { Member } from "src/db/entities/Member";
 import { Admin } from "src/db/entities/Admin";
 import { IsIn } from "class-validator";
+import { REGISTER_SUCCESS } from "src/common/constant/api-response.constant";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -33,6 +34,7 @@ export class AuthController {
     try {
       res.data = await this.authService.registerMember(createUserDto);
       res.success = true;
+      res.message = `Member ${REGISTER_SUCCESS}`;
       return res;
     } catch (e) {
       res.success = false;
@@ -51,6 +53,7 @@ export class AuthController {
         createUserDto.members
       );
       res.success = true;
+      res.message = `Batch register completed!`;
       return res;
     } catch (e) {
       res.success = false;
@@ -73,7 +76,11 @@ export class AuthController {
       Admin | Member
     >;
     try {
-      res.data = await this.authService.login(loginUserDto, type);
+      if (type.toUpperCase().trim() === "ADMIN") {
+        res.data = await this.authService.loginAdmin(loginUserDto);
+      } else {
+        res.data = await this.authService.loginMember(loginUserDto);
+      }
       res.success = true;
       return res;
     } catch (e) {

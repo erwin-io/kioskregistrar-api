@@ -9,6 +9,9 @@ import { UsersService } from "./services/users.service";
 import * as Joi from "@hapi/joi";
 import { getEnvPath } from "./common/utils/utils";
 import { UsersModule } from "./controller/users/users.module";
+import { RequestModule } from "./controller/request/request.module";
+import { RequestTypeModule } from "./controller/request-type/request-type.module";
+import { RequestRequirementsModule } from "./controller/request-requirements/request-requirements.module";
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 @Module({
   imports: [
@@ -23,6 +26,9 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
     AuthModule,
     UsersModule,
     FirebaseProviderModule,
+    RequestModule,
+    RequestTypeModule,
+    RequestRequirementsModule,
   ],
   providers: [AppService],
   controllers: [],

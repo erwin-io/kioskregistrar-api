@@ -9,8 +9,10 @@ import {
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
-export class PaginationParams {
-  @ApiProperty()
+export class PaginationParamsDto {
+  @ApiProperty({
+    default: 10,
+  })
   @IsNotEmpty()
   @IsNumberString()
   @Transform(({ obj, key }) => {
@@ -18,7 +20,9 @@ export class PaginationParams {
   })
   pageSize: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    default: 0,
+  })
   @IsNotEmpty()
   @IsNumberString()
   @Transform(({ obj, key }) => {
@@ -32,6 +36,7 @@ export class PaginationParams {
 
   @ApiProperty({
     isArray: true,
+    default: []
   })
   @IsArray()
   @IsNotEmpty()

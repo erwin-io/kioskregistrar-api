@@ -16,9 +16,6 @@ export class UpdateRequestDescriptionDto {
 }
 
 export class UpdateRequestStatusDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  requestNo: string;
 }
 
 

@@ -9,7 +9,7 @@ export class RequestPaginationParamsDto extends PaginationParamsDto {
   })
   @IsOptional()
   @Transform(({ obj, key }) => {
-    return obj[key].toString();
+    return obj[key]?.toString();
   })
   assignedAdminId: string;
 }
